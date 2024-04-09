@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # Import CORS
 import joblib
 import pandas as pd
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS on the app
 
 # Load the trained model from disk
 model = joblib.load('house_price_prediction_model.pkl')
