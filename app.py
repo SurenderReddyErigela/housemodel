@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import joblib
 import pandas as pd
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='build', static_url_path='')
 
 # Load the trained model from disk
 model = joblib.load('house_price_prediction_model.pkl')
@@ -31,9 +32,17 @@ def predict():
     except Exception as e:
         return jsonify({"error": str(e)})
 
-@app.route('/', methods=['GET'])
-def home():
-    return "House Price Prediction API is running!"
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(app.static_folder + '/' + path):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # When running locally, disable this if you don't want to use the React build
+    # app.run(debug=True, use_reloader=True)
+    # When running on Heroku, comment out the above line and uncomment the below line
+    port = int(os.environ.get('PORT', 80))
+    app.run(host='0.0.0.0', port=port, debug=False)  # Set debug=False for production
