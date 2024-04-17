@@ -1,5 +1,5 @@
 Title: House Price Prediction Model
-Subtitle: An overview of the data analysis and machine learning model used to predict house prices.
+An overview of the data analysis and machine learning model used to predict house prices.
 
 Dataset Overview:
 Description of the dataset: The dataset includes information on 1,460 residential homes.
